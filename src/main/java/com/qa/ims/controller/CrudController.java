@@ -13,8 +13,6 @@ public interface CrudController<T> {
 	T create();
 
 	T update();
-	
-	void view(); //Links to view command. links to customer control
 
 	int delete();
 
