@@ -79,13 +79,5 @@ public class CustomerController implements CrudController<Customer> {
 		Long id = utils.getLong();
 		return customerDAO.delete(id);
 	}
-	
-	@Override
-	public void view() {
-		List<Customer> allCustomers = customerDAO.readAll(); // takes all customers and puts them in an array list
-		for(Customer x : allCustomers) { //iterates and outputs each customer in the list.
-			LOGGER.info(x);
-		}
-	}
 
 }
