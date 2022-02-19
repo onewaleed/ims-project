@@ -25,7 +25,7 @@ public class IMS {
 	}
 
 	public void imsSystem() {
-		LOGGER.info("Welcome to the Inventory Management System!");
+		LOGGER.info("Welcome to Waleed's Amazing Inventory Management System!");
 		DBUtils.connect();
 
 		Domain domain = null;
@@ -83,6 +83,8 @@ public class IMS {
 		case UPDATE:
 			crudController.update();
 			break;
+		case VIEW: //making view case
+			crudController.view(); //calling view in crudcontroller
 		case DELETE:
 			crudController.delete();
 			break;
