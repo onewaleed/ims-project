@@ -7,8 +7,11 @@ import com.qa.ims.controller.Action;
 import com.qa.ims.controller.CrudController;
 import com.qa.ims.controller.CustomerController;
 import com.qa.ims.controller.ItemController;
+import com.qa.ims.controller.OrderController;
 import com.qa.ims.persistence.dao.CustomerDAO;
 import com.qa.ims.persistence.dao.ItemDAO;
+import com.qa.ims.persistence.dao.OrderDAO;
+import com.qa.ims.persistence.dao.OrderItemsDAO;
 import com.qa.ims.persistence.domain.Domain;
 import com.qa.ims.utils.DBUtils;
 import com.qa.ims.utils.Utils;
@@ -19,7 +22,9 @@ public class IMS {
 
 	private final CustomerController customers;
 	private final ItemController items;
+	private final OrderController orders;
 	private final Utils utils;
+	
 
 	public IMS() {
 		this.utils = new Utils();
@@ -27,10 +32,13 @@ public class IMS {
 		this.customers = new CustomerController(custDAO, utils);
 		final ItemDAO itemDAO = new ItemDAO();
 		this.items = new ItemController(itemDAO, utils);
+		final OrderDAO orderDAO = new OrderDAO();
+		final OrderItemsDAO orderItemDAO = new OrderItemsDAO();
+		this.orders = new OrderController(orderDAO, orderItemDAO, utils);
 	}
 
 	public void imsSystem() {
-		LOGGER.info("Welcome to Waleed's Amazing Inventory Management System!");
+		LOGGER.info("Welcome to THE Inventory Management System");
 		DBUtils.connect();
 
 		Domain domain = null;
@@ -58,6 +66,7 @@ public class IMS {
 				active = this.items;
 				break;
 			case ORDER:
+				active = this.orders;
 				break;
 			case STOP:
 				return;
@@ -67,7 +76,15 @@ public class IMS {
 
 			LOGGER.info(() ->"What would you like to do with " + domain.name().toLowerCase() + ":");
 
-			Action.printActions();
+            switch (domain) {
+            case ORDER:
+                Action.printOrderActions();
+                break;
+            default:
+                Action.printActions();
+                break;
+            }//////////////////////////
+			  
 			Action action = Action.getAction(utils);
 
 			if (action == Action.RETURN) {
@@ -91,6 +108,9 @@ public class IMS {
 			break;
 		case DELETE:
 			crudController.delete();
+			break;
+		case CALCULATE:
+			crudController.calculate();
 			break;
 		case RETURN:
 			break;
